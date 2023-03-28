@@ -44,7 +44,24 @@ def add_comment(request):
 
     return HttpResponse(json.dumps(resp,cls=DateEncoder), content_type='application/json')
 
-
+@csrf_exempt
+def get_comment_by_product(request,product_id):
+    data = []
+    resp = {}
+    # This will fetch the data from the database.
+    comment_details = Comment_Detail.objects.all()
+    for tbl_value in comment_details.values():
+        data.append(tbl_value)
+    # If data is available then it returns the data.
+    if data:
+        resp['status'] = 'Success'
+        resp['status_code'] = '200'
+        resp['data'] = data
+    else:
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'Data is not available.'
+    return HttpResponse(json.dumps(resp,cls=DateEncoder), content_type='application/json')
 
 
 # @csrf_exempt

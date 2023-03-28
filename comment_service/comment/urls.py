@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     # path('cart/<int:product_id>', views.add_to_cart),
     path('comment/',views.add_comment),
-    # path('cart/<int:id>',views.deleteCartItem),
+    path('comment/<str:product_id>',views.get_comment_by_product),
 
     # path('shipment_updates/', views.shipment_reg_update)
 ]
