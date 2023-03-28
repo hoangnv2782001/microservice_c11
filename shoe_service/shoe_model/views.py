@@ -40,6 +40,38 @@ def get_shoes(request):
         resp['message'] = 'Data is not available.'
     return HttpResponse(json.dumps(resp,cls=DateEncoder), content_type='application/json')
 
+@csrf_exempt
+def add_shoe(request):
+    shoe_id = request.POST.get('shoe_id')
+    name = request.POST.get('name')
+    category = request.POST.get('category')
+    brand = request.POST.get('brand')
+    availability = 'available'
+    price = request.POST.get('price')
+    description = request.POST.get('description')
+    quantity = request.POST.get('quantity')
+    size = request.POST.get('size')
+    resp = {}
+    if shoe_id and name and price and quantity and category and description and size and brand:
+        ### It will call the store data function.
+        respdata = insert_shoe(shoe_id=shoe_id,title=name,price=price,quantity=quantity,availability=availability,description=description,category=category,size=size,brand=brand)
+        ### If it returns value then will show success.
+        if respdata:
+            resp['status'] = 'Success'
+            resp['status_code'] = '200'
+            resp['message'] = 'completed.'
+        ### If it is returning null value then it will show failed.
+        else:
+            resp['status'] = 'Failed'
+            resp['status_code'] = '400'
+            resp['message'] = 'Please try again.'
+        ### If any mandatory field is missing then it will be through a failed message.
+    else:
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'All fields are mandatory.'
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
 
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
