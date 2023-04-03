@@ -53,6 +53,26 @@ def update_product_quantity(request,product_id):
         resp['status_code'] = '200'
     return HttpResponse(json.dumps(resp), content_type='application/json')
 
+@csrf_exempt
+def get_product(request,product_id):
+    resp = {}
+
+    product = product_details.objects.filter(product_id=product_id).values().first()
+
+    if product is None:
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'product Not Found.'
+    else:
+        resp['status'] = 'Success'
+        resp['status_code'] = '200'
+        resp['product'] = product
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
+
+
+
+
 
 
 

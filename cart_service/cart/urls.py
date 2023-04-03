@@ -3,10 +3,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # path('cart/<int:product_id>', views.add_to_cart),
-    path('cart/',views.get_cart_items),
 
-    path('cart/<int:product_id>/',views.add_to_cart),
+    path('cart/<str:cart_id>/',views.handle_request),
+
 
     # path('shipment_updates/', views.shipment_reg_update)
 ]

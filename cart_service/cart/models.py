@@ -4,7 +4,7 @@ from django.db import models
 
 class CartItem(models.Model):
     cart_id = models.CharField(max_length=50)
-    price = models.CharField(max_length=100)
+    price = models.IntegerField()
     quantity = models.IntegerField(default=1)
     product_id = models.CharField(max_length=50)
     #
