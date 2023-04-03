@@ -10,6 +10,7 @@ from user_model.models import user_registration as userreg
 # This function is for fetching the user data.
 def user_data(uname):
     user = userreg.objects.filter(email=uname)
+    print(user.values())
     for data in user.values():
         return data
 
@@ -31,6 +32,7 @@ def user_info(request):
                 respdata = user_data(uname)
                 dict1 = {}
                 if respdata:
+                    dict1['ID'] = respdata.get('id','')
                     dict1['First Name'] = respdata.get('fname', '')
                     dict1['Last Name'] = respdata.get('lname', '')
                     dict1['Mobile Number'] = respdata.get('mobile', '')

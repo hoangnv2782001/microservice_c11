@@ -15,6 +15,7 @@ class product_details(models.Model):
     product_name = models.CharField(max_length=100)
     availability = models.CharField(max_length=15)
     price = models.CharField(max_length=10)
+    quantity = models.IntegerField(null=True)
 
     # It will help to print the values.
     def __str__(self):

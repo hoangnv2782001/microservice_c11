@@ -14,6 +14,8 @@ from product_model.models import product_details
 def get_product_data(request):
     data = []
     resp = {}
+    # pro = product_details(product_id='SP123',product_category='Giay',product_name='giay123',availability='availale',price='100',quantity=100)
+    # pro.save()
     # This will fetch the data from the database.
     prodata = product_details.objects.all()
     for tbl_value in prodata.values():
@@ -28,3 +30,29 @@ def get_product_data(request):
         resp['status_code'] = '400'
         resp['message'] = 'Data is not available.'
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
+
+@csrf_exempt
+def update_product_quantity(request,product_id):
+    resp = {}
+
+    val = json.loads(request.body)
+    quantity = val.get('quantity')
+    print('hoang dep trrai')
+
+    product = product_details.objects.get(product_id=product_id)
+    # product = products.first()
+
+    if product is None:
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'product Not Found.'
+    else:
+        product.quantity = quantity
+        product.save()
+        resp['status'] = 'Success'
+        resp['status_code'] = '200'
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
+
+
+

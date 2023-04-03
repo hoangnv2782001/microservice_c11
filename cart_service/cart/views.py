@@ -5,20 +5,24 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from cart.models import CartItem
 from django.views.decorators.http import require_http_methods
-def get_cart_items(cart_id,prodct_id):
-    products = CartItem.objects.filter(cart_id=cart_id,product_id=prodct_id)
+
+
+def get_cart_item(cart_id, product_id):
+    products = CartItem.objects.filter(cart_id=cart_id, product_id=product_id)
     return products.first()
 
-def data_insert(cart_id,price,quantity,product_id):
-    cart_item = CartItem(cart_id=cart_id,price=price,quantity=quantity,product_id=product_id)
+
+def data_insert(cart_id, price, quantity, product_id):
+    cart_item = CartItem(cart_id=cart_id, price=price, quantity=quantity, product_id=product_id)
     cart_item.save()
     return 1
 
+
 @csrf_exempt
-@require_http_methods(['POST'])
-def add_to_cart(request,product_id):
+# @require_http_methods(['POST'])
+def add_to_cart(request, product_id):
     if request.method == 'POST':
-        resp ={}
+        resp = {}
         if 'application/json' in request.META['CONTENT_TYPE']:
             val = json.loads(request.body)
 
@@ -26,16 +30,16 @@ def add_to_cart(request,product_id):
             quantity = val.get('quantity')
             price = val.get('price')
 
-            if cart_id and quantity and price and product_id :
-                respdata = get_cart_items(cart_id,product_id)
-                if respdata :
+            if cart_id and quantity and price and product_id:
+                respdata = get_cart_item(cart_id=cart_id,product_id=product_id)
+                if respdata:
                     respdata.quantity += quantity
                     respdata.save()
                     resp['status'] = 'Success'
                     resp['status_code'] = '200'
                     resp['message'] = 'Them Thanh Cong'
                 else:
-                    if data_insert(cart_id,price,quantity,product_id) :
+                    if data_insert(cart_id, price, quantity, product_id):
                         resp['status'] = 'Success'
                         resp['status_code'] = '200'
                         resp['message'] = 'Them Thanh Cong'
@@ -49,8 +53,8 @@ def add_to_cart(request,product_id):
                 resp['message'] = 'Thieu Truong Thong Tin'
         return HttpResponse(json.dumps(resp), content_type='application/json')
 
-@csrf_exempt
 
+@csrf_exempt
 def get_cart_items(request):
     data = []
     resp = {}
@@ -69,24 +73,26 @@ def get_cart_items(request):
         resp['message'] = 'Khong Co Du Lieu'
     return HttpResponse(json.dumps(resp), content_type='application/json')
 
+
 @csrf_exempt
 # @require_http_methods(['DELETE'])
 def deleteCartItem(request, id):
     resp = {}
+    data = []
 
     respdata = CartItem.objects.get(id=id)
     respdata.delete()
-    resp['status'] = 'Failed'
-    resp['status_code'] = '400'
-    resp['message'] = 'Them That Bai'
+    # This will fetch the data from the database.
+    cart_items = CartItem.objects.all()
+    for tbl_value in cart_items.values():
+        data.append(tbl_value)
+        # If data is available then it returns the data.
+    if data:
+        resp['status'] = 'Success'
+        resp['status_code'] = '200'
+        resp['data'] = data
+    else:
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'Khong Co Du Lieu'
     return HttpResponse(json.dumps(resp), content_type='application/json')
-
-
-
-
-
-
-
-
-
-
