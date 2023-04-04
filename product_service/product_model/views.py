@@ -10,6 +10,12 @@ from django.shortcuts import render
 import json
 from django.views.decorators.csrf import csrf_exempt
 from product_model.models import product_details
+
+def insert_shoe(shoe_id,category,name,availability,price,quantity):
+    book_data = product_details(product_id=shoe_id,product_name=name,product_category=category,quantity=quantity,availability=availability,price=price)
+    book_data.save()
+    return 1
+
 @csrf_exempt
 def get_product_data(request):
     data = []
@@ -68,6 +74,37 @@ def get_product(request,product_id):
         resp['status_code'] = '200'
         resp['product'] = product
     return HttpResponse(json.dumps(resp), content_type='application/json')
+
+@csrf_exempt
+def add_product(request):
+    product_id = request.POST.get('id')
+    product_name = request.POST.get('name')
+    product_category = request.POST.get('category')
+    availability = 'available'
+    price = request.POST.get('price')
+    quantity = request.POST.get('quantity')
+
+    resp = {}
+    if product_category  and product_id and product_name and price and quantity :
+        ### It will call the store data function.
+        respdata = insert_shoe(shoe_id=product_id,name=product_name,price=price,quantity=quantity,availability=availability,category=product_category)
+        ### If it returns value then will show success.
+        if respdata:
+            resp['status'] = 'Success'
+            resp['status_code'] = '200'
+            resp['message'] = 'completed.'
+        ### If it is returning null value then it will show failed.
+        else:
+            resp['status'] = 'Failed'
+            resp['status_code'] = '400'
+            resp['message'] = 'Please try again.'
+        ### If any mandatory field is missing then it will be through a failed message.
+    else:
+        resp['status'] = 'Failed'
+        resp['status_code'] = '400'
+        resp['message'] = 'All fields are mandatory.'
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
 
 
 
