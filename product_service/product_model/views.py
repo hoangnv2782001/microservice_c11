@@ -12,7 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 from product_model.models import product_details
 
 def insert_shoe(shoe_id,category,name,availability,price,quantity):
-    book_data = product_details(product_id=shoe_id,product_name=name,product_category=category,quantity=quantity,availability=availability,price=price)
+    book_data = product_details(product_id=shoe_id,product_name=name,
+                                product_category=category,quantity=quantity,
+                                availability=availability,price=price)
     book_data.save()
     return 1
 
@@ -87,7 +89,8 @@ def add_product(request):
     resp = {}
     if product_category  and product_id and product_name and price and quantity :
         ### It will call the store data function.
-        respdata = insert_shoe(shoe_id=product_id,name=product_name,price=price,quantity=quantity,availability=availability,category=product_category)
+        respdata = insert_shoe(shoe_id=product_id,name=product_name,price=price,
+                               quantity=quantity,availability=availability,category=product_category)
         ### If it returns value then will show success.
         if respdata:
             resp['status'] = 'Success'

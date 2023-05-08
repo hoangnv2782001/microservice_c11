@@ -17,10 +17,9 @@ def get_transaction_details(uname):
 
 
 ### This function is used for storing the data.
-def store_data(uname, prodid, price, quantity, mode_of_payment, mobile):
-    user_data = paystat(username=uname, product_id=prodid, price=
-    price, quantity=quantity, mode_of_payment=mode_of_payment, mobile=
-                        mobile, status="Success")
+def store_data(uname, order_id, mode_of_payment, mobile):
+    user_data = paystat(username=uname, order_id=order_id, mode_of_payment=mode_of_payment, mobile=mobile,
+                        status="Success")
     user_data.save()
     return 1
 
@@ -29,15 +28,14 @@ def store_data(uname, prodid, price, quantity, mode_of_payment, mobile):
 @csrf_exempt
 def get_payment(request):
     uname = request.POST.get("User Name")
-    prodid = request.POST.get("Product id")
-    price = request.POST.get("Product price")
-    quantity = request.POST.get("Product quantity")
+    print(uname)
+    order_id = request.POST.get("Order id")
     mode_of_payment = request.POST.get("Payment mode")
     mobile = request.POST.get("Mobile Number")
     resp = {}
-    if uname and prodid and price and quantity and mode_of_payment and mobile:
+    if uname and order_id and mode_of_payment and mobile:
         ### It will call the store data function.
-        respdata = store_data(uname, prodid, price, quantity, mode_of_payment, mobile)
+        respdata = store_data(uname, order_id, mode_of_payment, mobile)
         respdata2 = ship_update(uname)
         ### If it returns value then will show success.
         if respdata:

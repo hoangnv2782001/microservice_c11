@@ -42,3 +42,12 @@ def user_login(request):
         resp['status_code'] = '400'
         resp['message'] = 'All fields are mandatory.'
     return HttpResponse(json.dumps(resp), content_type='application/json')
+@csrf_exempt
+def register(request):
+    resp={
+        'status': 'success',
+                'message': 'User has been logged in successfully.'
+    }
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
+

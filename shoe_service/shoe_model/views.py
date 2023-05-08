@@ -15,7 +15,9 @@ from shoe_model.models import Shoe
 
 
 def insert_shoe(shoe_id,title,category,brand,availability,price,description,quantity,size):
-    book_data = Shoe(shoe_id=shoe_id,name=title,category=category,brand=brand,quantity=quantity,availability=availability,description=description,price=price,size=size)
+    book_data = Shoe(shoe_id=shoe_id,name=title,category=category,
+                     brand=brand,quantity=quantity,availability=availability,
+                     description=description,price=price,size=size)
     book_data.save()
     return 1
 

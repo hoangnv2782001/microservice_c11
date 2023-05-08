@@ -7,7 +7,7 @@ import json
 # Create your views here.
 
 def update_product_quantity(product_id, quantity):
-    url = f'http://127.0.0.1:7000/product/{product_id}'
+    url = f'http://127.0.0.1:7500/product/{product_id}'
 
     body = {"quantity": quantity}
     data = json.dumps(body)
@@ -18,7 +18,7 @@ def update_product_quantity(product_id, quantity):
 
 
 def get_product(product_id):
-    url = f'http://127.0.0.1:7000/product/{product_id}'
+    url = f'http://127.0.0.1:7500/product/{product_id}'
     headers = {'Content-Type': 'application/json'}
     response = requests.get(url, headers=headers)
     val = json.loads(response.content.decode('utf-8'))

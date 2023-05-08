@@ -11,22 +11,28 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import json
 from django.views.decorators.csrf import csrf_exempt
-from clothe_model.models import Clothe
+from clothe_model.models import Clothes
 
 
-def insert_clothe(shoe_id,title,category,brand,availability,price,description,quantity,size,color):
-    book_data = Clothe(clothe_id=shoe_id,name=title,category=category,brand=brand,quantity=quantity,availability=availability,description=description,price=price,size=size,color=color)
+def insert_clothes(shoe_id, title, category, brand, availability, price, description, quantity, size, color):
+    book_data = Clothes(clothe_id=shoe_id, name=title, category=category, brand=brand, quantity=quantity,
+                       availability=availability, description=description, price=price, size=size, color=color)
     book_data.save()
     return 1
-
+@csrf_exempt
+def handle_request(request):
+    if request.method == 'GET':
+        return get_clothes(request)
+    else:
+        return add_clothes(request)
 
 @csrf_exempt
 def get_clothes(request):
     data = []
     resp = {}
-    insert_clothe('11112', 'ao', 'sơ mi', 'vn',  'avialable', 100, 'giay hay',20,34,'red')
+    insert_clothes('11112', 'ao', 'sơ mi', 'vn', 'avialable', 100, 'giay hay', 20, 34, 'red')
     # This will fetch the data from the database.
-    prodata = Clothe.objects.all()
+    prodata = Clothes.objects.all()
     for tbl_value in prodata.values():
         data.append(tbl_value)
     # If data is available then it returns the data.
@@ -38,10 +44,11 @@ def get_clothes(request):
         resp['status'] = 'Failed'
         resp['status_code'] = '400'
         resp['message'] = 'Data is not available.'
-    return HttpResponse(json.dumps(resp,cls=DateEncoder), content_type='application/json')
+    return HttpResponse(json.dumps(resp, cls=DateEncoder), content_type='application/json')
+
 
 @csrf_exempt
-def add_clothe(request):
+def add_clothes(request):
     shoe_id = request.POST.get('shoe_id')
     name = request.POST.get('name')
     category = request.POST.get('category')
@@ -54,8 +61,11 @@ def add_clothe(request):
     color = request.POST.get('color')
     resp = {}
     if shoe_id and name and price and quantity and category and description and size and brand and color:
+
         ### It will call the store data function.
-        respdata = insert_clothe(shoe_id=shoe_id,title=name,price=price,quantity=quantity,availability=availability,description=description,category=category,size=size,brand=brand,color=color)
+        respdata = insert_clothes(clothes=shoe_id, title=name, price=price, quantity=quantity,
+                                  availability=availability, description=description, category=category, size=size,
+                                  brand=brand, color=color)
         ### If it returns value then will show success.
         if respdata:
             resp['status'] = 'Success'
@@ -79,4 +89,3 @@ class DateEncoder(json.JSONEncoder):
         if isinstance(obj, date):
             return obj.strftime('%d-%m-%Y')
         return super().default(obj)
-

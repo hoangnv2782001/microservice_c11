@@ -9,6 +9,7 @@ from django.db import models
 
 # model của book
 class Book(models.Model):
+
     # The following are the fields of our table.
     barcode = models.CharField(max_length=200)
     book_category = models.CharField(max_length=200)

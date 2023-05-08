@@ -13,16 +13,14 @@ def shipment_details_update(uname):
     user = paystat.objects.filter(username = uname)
     for data in user.values():
         data
-    ship_dict['Product Id'] = data['product_id']
-    ship_dict['Quantity'] = data['quantity']
+    ship_dict['Order Id'] = data['order_id']
     ship_dict['Payment Status'] = data['status']
     ship_dict['Transaction Id'] = data['id']
     ship_dict['Mobile Number'] = data['mobile']
 
     ### It is used for getting the user info.
     url = 'http://127.0.0.1:5000/userinfo/'
-    d1 = {}
-    d1["User Name"] = data['username']
+    d1 = {"User Name": data['username']}
     data = json.dumps(d1)
     headers = {'Content-Type': 'application/json'}
     response = requests.post(url, data=data, headers=headers)
@@ -33,7 +31,7 @@ def shipment_details_update(uname):
     ship_dict['Email Id'] = val1['data']['Email Id']
 
     ### Data is ready for calling the shipment_updates API.
-    url = 'http://127.0.0.1:8000/shipment_updates/'
+    url = 'http://127.0.0.1:6000/shipment_updates/'
     data = json.dumps(ship_dict)
     headers = {'Content-Type': 'application/json'}
     response = requests.post(url, data=data, headers=headers)

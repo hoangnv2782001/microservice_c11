@@ -8,7 +8,7 @@ from django.db import models
 
 
 # This is our model for user registration.
-class Clothe(models.Model):
+class Clothes(models.Model):
     # The following are the fields of our table.
     clothe_id = models.CharField(max_length=10)
     category = models.CharField(max_length=50)
@@ -17,9 +17,9 @@ class Clothe(models.Model):
     price = models.IntegerField()
     quantity = models.IntegerField(null=True)
     size = models.IntegerField()
-    color = models.CharField()
+    color = models.CharField(max_length=100)
     description = models.TextField()
-    brand = models.CharField()
+    brand = models.CharField(max_length=100)
     #
     # # It will help to print the values.
     # def __str__(self):
